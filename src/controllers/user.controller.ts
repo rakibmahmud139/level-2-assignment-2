@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { userServices } from '../services/user.services';
 import UserValidationSchema from '../validation/user.validation';
 
+//createUser
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
@@ -21,6 +22,7 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+//getAllUser
 const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getAllUser();
@@ -41,6 +43,7 @@ const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
+//getSingleUser
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -62,6 +65,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+//updateUser
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -84,6 +88,7 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+//deleteUser
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -105,6 +110,7 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+//addProductInOrder
 const addProductInOrder = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -127,6 +133,7 @@ const addProductInOrder = async (req: Request, res: Response) => {
   }
 };
 
+//getUserOrders
 const getUserOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
@@ -148,6 +155,30 @@ const getUserOrders = async (req: Request, res: Response) => {
   }
 };
 
+//getTotalPriceInOrders
+const getTotalPriceInOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const result = await userServices.getTotalPriceInOrders(userId);
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: {
+        totalPrice: result,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const userController = {
   createUser,
   getAllUser,
@@ -156,4 +187,5 @@ export const userController = {
   deleteUser,
   addProductInOrder,
   getUserOrders,
+  getTotalPriceInOrders,
 };

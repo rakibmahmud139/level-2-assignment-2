@@ -1,40 +1,50 @@
+import { Document } from 'mongoose';
 import { IUser, Orders } from '../interface/user.interface';
 import User from '../models/user.model';
 
+//createUser
 const createUser = async (userData: IUser): Promise<IUser> => {
   const result = await User.create(userData);
   return result;
 };
 
+// getAllUser
 const getAllUser = async () => {
   const result = await User.find();
   return result;
 };
 
+// getSingleUser
 const getSingleUser = async (userId: number) => {
-  if (!(await User.isUserExists(userId))) {
+  const user = await User.isUserExists(userId);
+  if (!user) {
     throw new Error('User not found');
   }
   const result = await User.findOne({ userId });
   return result;
 };
 
+// updateUser
 const updateUser = async (userId: number, userData: IUser) => {
-  if (!(await User.isUserExists(userId))) {
+  const user = await User.isUserExists(userId);
+  if (!user) {
     throw new Error('User not found');
   }
   const result = await User.updateOne({ userId }, userData);
   return result;
 };
 
+//deleteUser
 const deleteUser = async (userId: number) => {
-  if (!(await User.isUserExists(userId))) {
+  const user = await User.isUserExists(userId);
+  if (!user) {
     throw new Error('User not found');
   }
   const result = await User.deleteOne({ userId });
   return result;
 };
 
+//addProductInOrder
 const addProductInOrder = async (
   userId: number,
   productData: Orders,
@@ -50,10 +60,11 @@ const addProductInOrder = async (
 
   user.orders.push(productData);
 
-  // await user.save();
+  await (user as IUser & Document).save();
   return user.orders;
 };
 
+//getUserOrders
 const getUserOrders = async (userId: number): Promise<Orders[]> => {
   const user = await User.isUserExists(userId);
   if (!user) {
@@ -61,6 +72,39 @@ const getUserOrders = async (userId: number): Promise<Orders[]> => {
   }
 
   return user.orders || [];
+};
+
+//getTotalPriceInOrders
+const getTotalPriceInOrders = async (userId: number): Promise<number> => {
+  const user = await User.isUserExists(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const totalPrice = await User.aggregate([
+    {
+      $match: {
+        userId: user.userId,
+      },
+    },
+    { $unwind: '$orders' },
+    {
+      $group: {
+        _id: null,
+        totalPrice: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+    {
+      $project: {
+        totalPrice: 1,
+        _id: 0,
+      },
+    },
+  ]);
+
+  return totalPrice[0] || 0;
 };
 
 export const userServices = {
@@ -71,4 +115,5 @@ export const userServices = {
   deleteUser,
   addProductInOrder,
   getUserOrders,
+  getTotalPriceInOrders,
 };
