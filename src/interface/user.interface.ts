@@ -16,7 +16,7 @@ export interface IUser {
   fullName: FullName;
   age: number;
   email: string;
-  isActive: 'true' | 'false';
+  isActive: boolean;
   hobbies: string[];
   address: Address;
 }
