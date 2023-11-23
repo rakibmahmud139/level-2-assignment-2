@@ -6,6 +6,12 @@ const createUser = async (userData: IUser): Promise<IUser> => {
   return result;
 };
 
+const getAllUser = async (): Promise<IUser[]> => {
+  const result = await User.find();
+  return result;
+};
+
 export const userServices = {
   createUser,
+  getAllUser,
 };

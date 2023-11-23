@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { userRouter } from './routes/user.routes';
+import { userRouter } from './routes/user.route';
 const app: Application = express();
 
 //middleware
