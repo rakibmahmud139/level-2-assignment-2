@@ -36,15 +36,12 @@ const AddressSchema = new Schema<Address>({
 const OrdersSchema = new Schema<Orders>({
   productName: {
     type: String,
-    required: true,
   },
   price: {
     type: Number,
-    required: true,
   },
   quantity: {
     type: Number,
-    required: true,
   },
 });
 
@@ -81,11 +78,10 @@ const UserSchema = new Schema<IUser, UserModel>({
     required: true,
   },
   address: AddressSchema,
-  orders: OrdersSchema,
+  orders: { type: [OrdersSchema], default: [] },
 });
 
 UserSchema.post('save', function (doc, next) {
-  // doc.password = undefined;
   next();
 });
 

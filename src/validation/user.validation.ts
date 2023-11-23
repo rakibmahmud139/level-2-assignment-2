@@ -12,14 +12,14 @@ const AddressValidationSchema = z.object({
 });
 
 const OrdersValidationSchema = z.object({
-  productName: z.string().min(1, { message: 'street is required' }),
-  price: z.number(),
-  quantity: z.number(),
+  productName: z.string().optional(),
+  price: z.number().optional(),
+  quantity: z.number().optional(),
 });
 
 const UserValidationSchema = z.object({
   userId: z.number().min(1, { message: 'userId is required' }),
-  username: z.string().min(1),
+  username: z.string().min(1, { message: 'username ia required' }),
   password: z.string().min(1).max(20, { message: 'password is required' }),
   fullName: FullNameValidationSchema,
   age: z.number(),
@@ -29,7 +29,7 @@ const UserValidationSchema = z.object({
     z.string().min(1, { message: 'at least hobbies is required' }),
   ),
   address: AddressValidationSchema,
-  orders: OrdersValidationSchema,
+  orders: z.array(OrdersValidationSchema),
 });
 
 export default UserValidationSchema;
