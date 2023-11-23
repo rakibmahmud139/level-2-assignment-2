@@ -12,16 +12,25 @@ const getAllUser = async () => {
 };
 
 const getSingleUser = async (userId: number) => {
+  if (!(await User.isUserExists(userId))) {
+    throw new Error('User not exists');
+  }
   const result = await User.findOne({ userId });
   return result;
 };
 
 const updateUser = async (userId: number, userData: IUser) => {
+  if (!(await User.isUserExists(userId))) {
+    throw new Error('User not exists');
+  }
   const result = await User.updateOne({ userId }, userData);
   return result;
 };
 
 const deleteUser = async (userId: number) => {
+  if (!(await User.isUserExists(userId))) {
+    throw new Error('User not exists');
+  }
   const result = await User.deleteOne({ userId });
   return result;
 };

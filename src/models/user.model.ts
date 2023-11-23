@@ -1,67 +1,122 @@
 import { Schema, model } from 'mongoose';
-import { FullName, IUser } from '../interface/user.interface';
+import {
+  Address,
+  FullName,
+  IUser,
+  Orders,
+  UserModel,
+} from '../interface/user.interface';
 
 const FullNameSchema = new Schema<FullName>({
   firstName: {
     type: String,
-    required: [true, 'firstName is required'],
+    required: true,
   },
   lastName: {
     type: String,
-    required: [true, 'lastName is required'],
+    required: true,
   },
 });
 
-const AddressSchema = new Schema({
+const AddressSchema = new Schema<Address>({
   street: {
     type: String,
-    required: [true, 'street is required'],
+    required: true,
   },
   city: {
     type: String,
-    required: [true, 'city is required'],
+    required: true,
   },
   country: {
     type: String,
-    required: [true, 'country is required'],
+    required: true,
   },
 });
 
-const UserSchema = new Schema<IUser>({
+const OrdersSchema = new Schema<Orders>({
+  productName: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+});
+
+const UserSchema = new Schema<IUser, UserModel>({
   userId: {
     type: Number,
-    required: [true, 'userId is required'],
+    required: true,
     unique: true,
   },
   username: {
     type: String,
-    required: [true, 'username is required'],
+    required: true,
     unique: true,
   },
   password: {
     type: String,
-    required: [true, 'password is required'],
+    required: true,
   },
   fullName: FullNameSchema,
   age: {
     type: Number,
-    required: [true, 'age is required'],
+    required: true,
   },
   email: {
     type: String,
-    required: [true, 'email is required'],
+    required: true,
   },
   isActive: {
     type: Boolean,
-    required: [true, 'isActive is required'],
+    required: true,
   },
   hobbies: {
     type: [String],
-    required: [true, 'hobbies is required'],
+    required: true,
   },
   address: AddressSchema,
+  orders: OrdersSchema,
 });
 
-const User = model<IUser>('User', UserSchema);
+UserSchema.post('save', function (doc, next) {
+  // doc.password = undefined;
+  next();
+});
+
+UserSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
+
+UserSchema.pre('find', function (next) {
+  this.select('-password');
+  this.select('-userId');
+  this.select('-hobbies');
+  next();
+});
+
+UserSchema.pre('findOne', function (next) {
+  this.select('-password');
+  next();
+});
+
+UserSchema.pre('updateOne', function (next) {
+  this.select('-password');
+  next();
+});
+
+UserSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+const User = model<IUser, UserModel>('User', UserSchema);
 
 export default User;
