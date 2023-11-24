@@ -29,7 +29,7 @@ const UserValidationSchema = z.object({
     z.string().min(1, { message: 'at least hobbies is required' }),
   ),
   address: AddressValidationSchema,
-  orders: z.array(OrdersValidationSchema),
+  orders: z.array(OrdersValidationSchema).optional(),
 });
 
 export default UserValidationSchema;

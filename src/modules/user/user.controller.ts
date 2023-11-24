@@ -141,7 +141,9 @@ const getUserOrders = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      data: result,
+      data: {
+        orders: result,
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -163,9 +165,7 @@ const getTotalPriceInOrders = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',
-      data: {
-        totalPrice: result,
-      },
+      data: result,
     });
   } catch (error) {
     res.status(500).json({

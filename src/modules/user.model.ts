@@ -94,7 +94,9 @@ UserSchema.methods.toJSON = function () {
 UserSchema.pre('find', function (next) {
   this.select('-password');
   this.select('-userId');
+  this.select('-isActive');
   this.select('-hobbies');
+  this.select('-orders');
   next();
 });
 
