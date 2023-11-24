@@ -81,22 +81,27 @@ const UserSchema = new Schema<IUser, UserModel>({
   orders: { type: [OrdersSchema], default: [] },
 });
 
-UserSchema.post('save', function (doc, next) {
-  next();
-});
-
 UserSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.password;
+  delete user.fullName._id;
+  delete user.address._id;
+  delete user.orders;
+  delete user.__v;
+  delete user._id;
   return user;
 };
 
 UserSchema.pre('find', function (next) {
+  this.select('-_id');
   this.select('-password');
   this.select('-userId');
+  this.select('-fullName._id');
+  this.select('-address._id');
   this.select('-isActive');
   this.select('-hobbies');
   this.select('-orders');
+  this.select('-__v');
   next();
 });
 

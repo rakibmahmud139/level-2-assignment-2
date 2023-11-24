@@ -70,11 +70,11 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
     const userData = req.body;
-    const result = await userServices.updateUser(userId, userData);
+    await userServices.updateUser(userId, userData);
     res.status(200).json({
       success: 'true',
       message: ' user updated successfully',
-      data: result,
+      data: userData,
     });
   } catch (error) {
     res.status(500).json({
@@ -92,11 +92,11 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
-    const result = await userServices.deleteUser(userId);
+    await userServices.deleteUser(userId);
     res.status(200).json({
       success: 'true',
       message: ' user deleted successfully',
-      data: result,
+      data: null,
     });
   } catch (error) {
     res.status(500).json({
@@ -115,11 +115,11 @@ const addProductInOrder = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
     const productData = req.body;
-    const result = await userServices.addProductInOrder(userId, productData);
+    await userServices.addProductInOrder(userId, productData);
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: result,
+      data: null,
     });
   } catch (error) {
     res.status(500).json({
