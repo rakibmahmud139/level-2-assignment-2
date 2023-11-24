@@ -10,7 +10,7 @@ const createUser = async (req: Request, res: Response) => {
     const zodParseData = UserValidationSchema.parse(userData);
     const result = await userServices.createUser(zodParseData);
     res.status(200).json({
-      success: 'true',
+      success: true,
       message: 'user created successfully',
       data: result,
     });
@@ -27,8 +27,8 @@ const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getAllUser();
     res.status(200).json({
-      success: 'true',
-      message: 'allUser fetched successfully',
+      success: true,
+      message: 'Users fetched successfully!',
       data: result,
     });
   } catch (error: any) {
@@ -49,8 +49,8 @@ const getSingleUser = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     const result = await userServices.getSingleUser(userId);
     res.status(200).json({
-      success: 'true',
-      message: 'single user fetched successfully',
+      success: true,
+      message: 'User fetched successfully!',
       data: result,
     });
   } catch (error: any) {
@@ -72,8 +72,8 @@ const updateUser = async (req: Request, res: Response) => {
     const userData = req.body;
     await userServices.updateUser(userId, userData);
     res.status(200).json({
-      success: 'true',
-      message: ' user updated successfully',
+      success: true,
+      message: 'User updated successfully!',
       data: userData,
     });
   } catch (error) {
@@ -94,8 +94,8 @@ const deleteUser = async (req: Request, res: Response) => {
     const userId = parseInt(req.params.userId);
     await userServices.deleteUser(userId);
     res.status(200).json({
-      success: 'true',
-      message: ' user deleted successfully',
+      success: true,
+      message: 'User deleted successfully!',
       data: null,
     });
   } catch (error) {
@@ -121,10 +121,10 @@ const addProductInOrder = async (req: Request, res: Response) => {
       message: 'Order created successfully!',
       data: null,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'User not found!',
       error: {
         code: 404,
         description: 'User not found!',
