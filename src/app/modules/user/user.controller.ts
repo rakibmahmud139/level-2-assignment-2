@@ -122,6 +122,7 @@ const addProductInOrder = async (req: Request, res: Response) => {
       data: null,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: 'User not found!',

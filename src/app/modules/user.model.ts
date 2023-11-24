@@ -85,13 +85,24 @@ const UserSchema = new Schema<IUser, UserModel>({
 
 UserSchema.methods.toJSON = function () {
   const user = this.toObject();
-  delete user.password;
-  delete user.fullName._id;
-  delete user.address._id;
-  delete user.orders;
-  delete user.__v;
-  delete user._id;
-  return user;
+  const responseData = {
+    userId: user.userId,
+    username: user.username,
+    fullName: user.fullName && {
+      firstName: user.fullName.firstName,
+      lastName: user.fullName.lastName,
+    },
+    age: user.age,
+    email: user.email,
+    isActive: user.isActive,
+    hobbies: user.hobbies,
+    address: user.address && {
+      street: user.address.street,
+      city: user.address.city,
+      country: user.address.country,
+    },
+  };
+  return responseData;
 };
 
 UserSchema.pre('save', async function (next) {
@@ -112,21 +123,6 @@ UserSchema.pre('find', function (next) {
   this.select('-hobbies');
   this.select('-orders');
   this.select('-__v');
-  next();
-});
-
-UserSchema.pre('findOne', function (next) {
-  this.select('-password');
-  next();
-});
-
-UserSchema.pre('updateOne', function (next) {
-  this.select('-password');
-  next();
-});
-
-UserSchema.pre('findOne', function (next) {
-  this.select({ 'orders._id': 0 });
   next();
 });
 

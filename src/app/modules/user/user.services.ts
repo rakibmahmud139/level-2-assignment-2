@@ -30,7 +30,11 @@ const updateUser = async (userId: number, userData: IUser) => {
   if (!user) {
     throw new Error('User not found');
   }
-  const result = await User.updateOne({ userId }, userData);
+  const result = await User.updateOne(
+    { userId },
+    { $set: userData },
+    { new: true, runValidators: true },
+  );
   return result;
 };
 
