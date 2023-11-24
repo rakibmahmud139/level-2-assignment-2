@@ -1,6 +1,6 @@
-import app from './app';
-import config from './config';
 import mongoose from 'mongoose';
+import config from './app/config';
+import app from './app';
 
 async function main() {
   try {
