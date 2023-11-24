@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
-import { userServices } from '../services/user.services';
-import UserValidationSchema from '../validation/user.validation';
+import { userServices } from './user.services';
+import UserValidationSchema from './user.validation';
 
 //createUser
 const createUser = async (req: Request, res: Response) => {

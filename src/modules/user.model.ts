@@ -5,7 +5,7 @@ import {
   IUser,
   Orders,
   UserModel,
-} from '../interface/user.interface';
+} from './user/user.interface';
 
 const FullNameSchema = new Schema<FullName>({
   firstName: {

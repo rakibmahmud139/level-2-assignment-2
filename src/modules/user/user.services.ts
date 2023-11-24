@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
-import { IUser, Orders } from '../interface/user.interface';
-import User from '../models/user.model';
+import { IUser, Orders } from './user.interface';
+import User from '../user.model';
 
 //createUser
 const createUser = async (userData: IUser): Promise<IUser> => {
