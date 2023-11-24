@@ -6,6 +6,8 @@ import {
   Orders,
   UserModel,
 } from './user/user.interface';
+import bcrypt from 'bcryptjs';
+import config from '../config';
 
 const FullNameSchema = new Schema<FullName>({
   firstName: {
@@ -92,6 +94,14 @@ UserSchema.methods.toJSON = function () {
   return user;
 };
 
+UserSchema.pre('save', async function (next) {
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+
 UserSchema.pre('find', function (next) {
   this.select('-_id');
   this.select('-password');
@@ -112,6 +122,11 @@ UserSchema.pre('findOne', function (next) {
 
 UserSchema.pre('updateOne', function (next) {
   this.select('-password');
+  next();
+});
+
+UserSchema.pre('findOne', function (next) {
+  this.select({ 'orders._id': 0 });
   next();
 });
 

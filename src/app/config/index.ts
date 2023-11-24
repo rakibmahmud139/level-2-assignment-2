@@ -8,4 +8,5 @@ dotenv.config({
 export default {
   port: process.env.PORT,
   mongodb_url: process.env.DATABASE_URL,
+  bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
 };
