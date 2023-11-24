@@ -92,7 +92,9 @@ const getTotalPriceInOrders = async (userId: number): Promise<number> => {
       $group: {
         _id: null,
         totalPrice: {
-          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+          $sum: {
+            $multiply: ['$orders.price', '$orders.quantity'],
+          },
         },
       },
     },
